@@ -7,7 +7,6 @@
 !.gitignore
 !library-fa20
 !foods.csv
-*.class
 *.log
 *.ctxt
 .mtj.tmp/
@@ -61,7 +60,6 @@ spec/
 # Created by https://www.gitignore.io/api/java,python,osx,windows,intellij,eclipse,bluej,netbeans,vim,emacs,microsoftoffice
 
 ### Java ###
-*.class
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
