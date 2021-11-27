@@ -59,6 +59,7 @@ public class Government {
 		}
 	}
 
+	/** ? */
 	public static class Explorer {
 		public void doStuff(Government a, Government b) {
 			Government favorite = Government.greaterTreasury(a, b);

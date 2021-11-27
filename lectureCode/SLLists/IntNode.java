@@ -7,3 +7,4 @@ public class IntNode {
 		next = n;
 	}
 }
+
