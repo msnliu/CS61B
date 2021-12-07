@@ -70,7 +70,7 @@ public class LinkedListDeque<T> {
         for (int i = 0; i < size; i++) {
             System.out.print(this.get(i) + " ");
         }
-        System.out.println();
+        System.out.println("\n");
     }
 
     public T removeFirst() {
@@ -97,7 +97,7 @@ public class LinkedListDeque<T> {
     }
 
     public T get(int index) {
-        if (size < index) {
+        if (index >= size) {
             return null;
         }
         int i = 0;

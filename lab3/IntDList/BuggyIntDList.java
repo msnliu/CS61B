@@ -29,6 +29,8 @@ public class BuggyIntDList extends IntDList {
      * @param d2 Node 2
      * @return Nodes arranged in ascending sorted order
      */
+
+    /** Hard */
     private DNode sortedMerge(DNode d1, DNode d2) {
 
         // FIXME: Below code has multiple problems. Debug the code to implement correct functionality.
@@ -36,17 +38,25 @@ public class BuggyIntDList extends IntDList {
         // ------ WRITE ADDITIONAL CODE HERE AND ONLY HERE (IF NEEDED) ------
 
         // ------------------------------------------------------------------
-
-        if (d1.val <= d2.val) {
-            d1.next = sortedMerge(d1, d2.next);   // FIXME: Replace this line (if needed). HINT: Step Into(F7) using debugger and try to figure out what it does.
-            d1.next.prev = d1;
-            d1.prev = null;
+        if (d1 == null) {
+            return d2;
+        } else if (d2 == null){
             return d1;
         } else {
-            d2.next = sortedMerge(d1.next, d2);   // FIXME: Replace this line (if needed). HINT: Step Into(F7) using debugger and try to figure out what it does.
-            d2.next.prev = d2;
-            d2.prev = null;
-            return d2;
+            if (d1.val <= d2.val) {
+                /** append to d1 */
+                d1.next = sortedMerge(d1.next, d2);   // FIXME: Replace this line (if needed). HINT: Step Into(F7) using debugger and try to figure out what it does.
+                d1.next.prev = d1;
+                /** may not need to set to null cuz will set it in previous line anyway ? */
+                /** d1.prev = null; */
+                return d1;
+            } else {
+                /** append to d2 */
+                d2.next = sortedMerge(d1, d2.next);   // FIXME: Replace this line (if needed). HINT: Step Into(F7) using debugger and try to figure out what it does.
+                d2.next.prev = d2;
+                /** d2.prev = null; */
+                return d2;
+            }
         }
     }
 
@@ -66,15 +76,15 @@ public class BuggyIntDList extends IntDList {
             temp = p.prev;
             p.prev = p.next;
             p.next = temp;
-            p = p.next;        // FIXME: Replace this line (if needed). HINT: Use debugger and Java Visualizer to figure out what it does.
+            p = p.prev;        // FIXME: Replace this line (if needed). HINT: Use debugger and Java Visualizer to figure out what it does.
         }
 
         // HINT: What does this if block do? Use Debugger and Java Visualizer to figure out.
         if (temp != null) {
             // ------ WRITE ADDITIONAL CODE HERE AND ONLY HERE (IF NEEDED) -----
-
+            back = front;
             // -----------------------------------------------------------------
-            front = temp.next;    // FIXME: Replace this line (if needed). HINT: Use debugger and Java Visualizer to figure out what it does.
+            front = temp.prev;    // FIXME: Replace this line (if needed). HINT: Use debugger and Java Visualizer to figure out what it does.
         }
     }
 }
