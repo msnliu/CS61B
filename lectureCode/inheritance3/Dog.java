@@ -17,6 +17,12 @@ public class Dog implements Comparable<Dog> {
         return size - uddaDog.size;
     }
 
+    /**
+     public interface Comparator<T> {
+     int compare(T o1, T o2);
+     }
+     */
+
     /** Since there's only room for one compareTo method, if we want multiple ways to compare, we must turn to Comparator. */
     private static class NameComparator implements Comparator<Dog> {
         public int compare(Dog a, Dog b) {
