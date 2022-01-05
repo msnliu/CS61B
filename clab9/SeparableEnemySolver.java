@@ -32,12 +32,7 @@ public class SeparableEnemySolver {
         }
         // initialize empty queue
         Queue<String> bfs = new LinkedList<>();
-        // do not set up starting key because here not all are possibly connected
-        // want to find the discrepancy in between two bfs
-        // true scenario: two graphs traversals, no interaction
-        // false scenario: interaction
         for (String i : g.labels()) {
-            /** treat each iteration as a bfs */
             if (mark.get(i) == 0) {
                 bfs.add(i);
                 mark.put(i, 1);
