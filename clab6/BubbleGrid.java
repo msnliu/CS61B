@@ -41,7 +41,6 @@ public class BubbleGrid {
 
         int numOfStuck = uf.sizeOf(topmost);
 
-        int i = 0;
         result = new int[darts.length];
         for (int j = darts.length - 1; j >= 0; j--) {
             int[] t = darts[j];
@@ -52,9 +51,8 @@ public class BubbleGrid {
             unionSurrounding(t[0], t[1], uf);
             int temp = uf.sizeOf(topmost);
             // minus pop itself!
-            result[i] = temp - numOfStuck - 1;
+            result[j] = temp - numOfStuck - 1;
             numOfStuck = temp;
-            i += 1;
         }
         return result;
     }
