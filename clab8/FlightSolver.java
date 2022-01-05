@@ -33,6 +33,9 @@ public class FlightSolver {
             if (start.peek().startTime <= end.peek().endTime) {
                 currCount += start.poll().passengers;
             } else {
+                // invariant 1: start < end
+                // invariant 2: start and end are on the same time scale when start > end
+                // so we must have accessed the start time of the end
                 currCount -= end.poll().passengers;
             }
             if (currCount > maxCount) {
