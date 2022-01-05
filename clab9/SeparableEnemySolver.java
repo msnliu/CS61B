@@ -33,6 +33,7 @@ public class SeparableEnemySolver {
         // initialize empty queue
         Queue<String> bfs = new LinkedList<>();
         for (String i : g.labels()) {
+            // treat each loop as a bfs
             if (mark.get(i) == 0) {
                 bfs.add(i);
                 mark.put(i, 1);
