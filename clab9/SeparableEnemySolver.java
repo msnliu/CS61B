@@ -34,6 +34,10 @@ public class SeparableEnemySolver {
         Queue<String> bfs = new LinkedList<>();
         for (String i : g.labels()) {
             // treat each loop as a bfs
+            // if there is no mark on String i, (indicating a separate enemy-friend connection) it will be a new bfs
+            // if there is mark on String i, no work needs to be done
+            // because once we add a mark, we also add it to the deque, and deque needs to be exhausted
+            // false will only take place within one enemy-friend connection (will not cross over two connections), typical scenario will be a triangle with vertices (1, 2, 2)
             if (mark.get(i) == 0) {
                 bfs.add(i);
                 mark.put(i, 1);
