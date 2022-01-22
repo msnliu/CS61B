@@ -19,7 +19,7 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
     public AugmentedStreetMapGraph(String dbPath) {
         super(dbPath);
         // You might find it helpful to uncomment the line below:
-        // List<Node> nodes = this.getNodes();
+        List<Node> nodes = this.getNodes();
     }
 
 
@@ -31,6 +31,7 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * @return The id of the node in the graph closest to the target.
      */
     public long closest(double lon, double lat) {
+
         return 0;
     }
 

@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bearmaps.proj2d.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2d.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2d.utils.Constants.*;
 
 /**
  * Handles requests from the web browser for map images. These images
@@ -84,12 +83,74 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      */
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        //System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        //System.out.println(requestParams);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+
+        // validate
+        double lrlon = requestParams.get("lrlon");
+        double ullon = requestParams.get("ullon");
+        double lrlat = requestParams.get("lrlat");
+        double ullat = requestParams.get("ullat");
+        double width = requestParams.get("w");
+
+        // completely outside of the root longitude/latitudes
+        if (ullon > ROOT_LRLON || lrlon < ROOT_ULLON || ullat < ROOT_LRLAT || lrlat > ROOT_ULLAT) {
+            return queryFail();
+        }
+        // query box that doesn’t make any sense
+        if (ullon > lrlon || ullat < lrlat) {
+            return queryFail();
+        }
+
+        // depth
+        double LonDPP = (lrlon - ullon) / width;
+        double currDPP = (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE;
+        int desiredDepth = getDepth(LonDPP, currDPP);
+        results.put("depth", desiredDepth);
+
+        // raster
+        int numOfGrids = (int) Math.pow(2, desiredDepth);
+        double colGridLength = (ROOT_LRLON - ROOT_ULLON) / numOfGrids;
+        double rowGridLength = (ROOT_ULLAT - ROOT_LRLAT) / numOfGrids;
+        int bound = numOfGrids - 1;
+        int col_ul = corner((ullon - ROOT_ULLON) / colGridLength, bound);
+        int row_ul = corner((ROOT_ULLAT - ullat) / rowGridLength, bound);
+        int col_lr = corner((lrlon - ROOT_ULLON) / colGridLength, bound);
+        int row_lr = corner((ROOT_ULLAT - lrlat) / rowGridLength, bound);
+        results.put("raster_ul_lon", ROOT_ULLON + col_ul * colGridLength);
+        results.put("raster_lr_lon", ROOT_ULLON + (col_lr + 1) * colGridLength);
+        results.put("raster_lr_lat", ROOT_ULLAT - (row_lr + 1) * rowGridLength);
+        results.put("raster_ul_lat", ROOT_ULLAT - row_ul * rowGridLength);
+        String[][] images = new String[row_lr - row_ul + 1][col_lr - col_ul + 1];
+
+        // image
+        for (int i = row_ul; i <= row_lr; i++) {
+            for (int j = col_ul; j <= col_lr; j++) {
+                images[i - row_ul][j - col_ul] = "d" + desiredDepth + "_x" + j + "_y" + i + ".png";
+            }
+        }
+
+        results.put("render_grid", images);
+        results.put("query_success", true);
         return results;
+    }
+
+    public int corner(double multiple, int bound) {
+        if (multiple < 0) {
+            return 0;
+        } else if (multiple > bound) {
+            return bound;
+        } else {
+            return (int) multiple;
+        }
+    }
+
+    public int getDepth(double LonDPP, double currDPP) {
+        int Depth = 0;
+        while (LonDPP < currDPP && Depth < 7) {
+            currDPP /= 2;
+            Depth += 1;
+        }
+        return Depth;
     }
 
     @Override
