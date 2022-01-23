@@ -1,8 +1,11 @@
 package bearmaps.proj2d;
 
+import bearmaps.proj2ab.Point;
+import bearmaps.proj2ab.WeirdPointSet;
 import bearmaps.proj2c.streetmap.StreetMapGraph;
 import bearmaps.proj2c.streetmap.Node;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedList;
@@ -20,8 +23,8 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
         super(dbPath);
         // You might find it helpful to uncomment the line below:
         List<Node> nodes = this.getNodes();
-    }
 
+    }
 
     /**
      * For Project Part II
@@ -32,7 +35,24 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      */
     public long closest(double lon, double lat) {
 
-        return 0;
+        // need to return Node id, however, nearest method is only available in WeirdPointSet
+        // put all Points in a list + map to Node
+        // put the list to WeirdPointSet
+        // find the nearest Point
+        // look for the Node in map and retrieve the id
+        
+        Map<Point, Node> map = new HashMap<>();
+        List<Point> lst = new LinkedList<>();
+
+        for (Node n : this.getNodes()) {
+            Point p = new Point(n.lon(), n.lat());
+            map.put(p, n);
+            lst.add(p);
+        }
+
+        WeirdPointSet ps = new WeirdPointSet(lst);
+        Point nearest = ps.nearest(lon, lat);
+        return map.get(nearest).id();
     }
 
 
